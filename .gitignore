@@ -1,0 +1,13 @@
+# Inspired by https://www.gitignore.io/api/intellij
+
+# User-specific stuff
+.idea/workspace.xml
+
+# Sensitive or high-churn files
+.idea/**/uiDesigner.xml
+
+# IntelliJ
+/out/
+
+# Mac OS
+*.DS_Store
