@@ -11,3 +11,7 @@ Refactoring of the video store example from Martin Fowler's 'Refactoring' book.
 ## Build the project
 
     gradlew assemble
+
+## Launch the unit tests
+
+    gradlew test

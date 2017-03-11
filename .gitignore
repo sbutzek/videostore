@@ -6,6 +6,10 @@
 # Sensitive or high-churn files
 .idea/**/uiDesigner.xml
 
+# IntelliJ + Gradle
+.idea/**/gradle.xml
+.idea/**/libraries
+
 # IntelliJ
 /out/
 
