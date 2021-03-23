@@ -1,11 +1,11 @@
 import java.util.Enumeration;
 import java.util.Vector;
 
-class Customer {
+class Statement {
     private String _name;
     private Vector _rentals = new Vector();
 
-    public Customer(String name) {
+    public Statement(String name) {
         _name = name;
     }
 
@@ -17,7 +17,7 @@ class Customer {
         return _name;
     }
 
-    public String statement() {
+    public String generate() {
         double totalAmount = 0;
         int frequentRenterPoints = 0;
         Enumeration rentals = _rentals.elements();
