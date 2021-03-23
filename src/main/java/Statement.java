@@ -4,6 +4,8 @@ import java.util.Vector;
 class Statement {
     private String _name;
     private Vector _rentals = new Vector();
+    private double totalAmount;
+    private int frequentRenterPoints;
 
     public Statement(String name) {
         _name = name;
@@ -18,8 +20,7 @@ class Statement {
     }
 
     public String generate() {
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        clearTotals();
         Enumeration rentals = _rentals.elements();
         String result = "Rental Record for " + getName() + "\n";
         while (rentals.hasMoreElements()) {
@@ -59,5 +60,10 @@ class Statement {
                 +
                 " frequent renter points";
         return result;
+    }
+
+    private void clearTotals() {
+        totalAmount = 0;
+        frequentRenterPoints = 0;
     }
 }

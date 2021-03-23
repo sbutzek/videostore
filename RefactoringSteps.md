@@ -15,7 +15,7 @@ Refactoring Demo based on:
 
 # Refactoring steps
 1. Rename class `Statement` to `Statement`
-2. Rename variable `statement` in `CustomerTest` to `statement`
+2. Rename variable `statement` in `StatementTest` to `statement`
 4. Rename method `Statement.statement()` to `Statement.generate()`
 5. `Statement.generate()`
    1. Extract method `clearTotals()` (initialization of `totalAmount` and `frequentRenterPoints`)
