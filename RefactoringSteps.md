@@ -4,45 +4,36 @@ Refactoring Demo based on:
 * [https://github.com/unclebob/videostore](https://github.com/unclebob/videostore)
 * [https://martinfowler.com/articles/refactoring-video-store-js/](https://martinfowler.com/articles/refactoring-video-store-js/)
 
-# Content
-- [Refactoring a JavaScript video store](#refactoring-a-javascript-video-store)
-- [Content](#content)
-- [Install](#install)
-- [Notes for Trainers](#notes-for-trainers)
-- [Refactoring steps](#refactoring-steps)
-- [Shortcut references](#shortcut-references)
-
 # Notes for Trainers
 
 * Explain the Source Code, starting with the tests
-* Show classes `Rental`, `Movie`, `Customer`
+* Show classes `Rental`, `Movie`, `Statement`
 * Run tests
 * Show test results after each refactoring step
 * Show coverage
 * Explain Shortcuts
 
 # Refactoring steps
-1. Rename class `Customer` to `Statement`
-2. Rename variable `customer` in `CustomerTest` to `statement`
-3. Rename file `customer.java` to `Statement.java` 
+1. Rename class `Statement` to `Statement`
+2. Rename variable `statement` in `CustomerTest` to `statement`
 4. Rename method `Statement.statement()` to `Statement.generate()`
 5. `Statement.generate()`
-   1. Extract method `clearTotals()` (initialization of `this.totalAmount` and `this.frequentRenterPoints`)
+   1. Extract method `clearTotals()` (initialization of `totalAmount` and `frequentRenterPoints`)
    2. Rename `result` to `statementText`
-   3. Extract method: `header()` (`let statementText = 'Rental Record for ...`)
+   3. Extract method: `header()` (`String statementText = 'Rental Record for ...`)
    4. Rename loop variable `each` to `rental`
    5. Extract method for for-loop: `rentalLines()`
    6. Extract method: `footer()`
     
     *Note:* Make sure this methods do not take the resulting string as a parameter. Create a new string and append it within the `Statement.generate()` method. The resulting method should look like this:
     
-    ```javascript
-    generate() {
-      this.clearTotals()
-      let statementText = this.header()
-      statementText += this.rentalLines()
-      statementText += this.footer()
-      return statementText
+    ```java
+    public String generate() {
+      clearTotals();
+      String statementText = header();
+      statementText += rentalLines();
+      statementText += footer();
+      return statementText;
     }
     ```
 
@@ -55,16 +46,6 @@ Refactoring Demo based on:
    1. Extract method `rentalLine()`
    
    The new method could look like this:
-   ```javascript
-   rentalLines() {
-     let rentalLines = ''
-     for (const rental of this.rentals) {
-       rentalLines += this.rentalLine(rental)
-     }
-     return rentalLines
-   }
-   ```
-   or a bit more functional, like this:
    ```javascript
    rentalLines() {
      return this.rentals
