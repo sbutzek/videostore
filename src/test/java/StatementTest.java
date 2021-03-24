@@ -15,7 +15,7 @@ public class StatementTest {
     @Test
     public void testStatementRegularShortRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("RRRrrrr!!!", Movie.REGULAR), 2));
+        statement.addRental(new Rental(new RegularMovie("RRRrrrr!!!"), 2));
         assertEquals("Rental Record for Me\n" +
                 "\tRRRrrrr!!!\t2.0\n" +
                 "Amount owed is 2.0\n" +
@@ -25,7 +25,7 @@ public class StatementTest {
     @Test
     public void testStatementRegularLongRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("RRRrrrr!!!", Movie.REGULAR), 10));
+        statement.addRental(new Rental(new RegularMovie("RRRrrrr!!!"), 10));
         assertEquals("Rental Record for Me\n" +
                 "\tRRRrrrr!!!\t14.0\n" +
                 "Amount owed is 14.0\n" +
@@ -35,7 +35,7 @@ public class StatementTest {
     @Test
     public void testStatementNewReleaseShortRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("Interstellar", Movie.NEW_RELEASE), 1));
+        statement.addRental(new Rental(new NewReleaseMovie("Interstellar"), 1));
         assertEquals("Rental Record for Me\n" +
                 "\tInterstellar\t3.0\n" +
                 "Amount owed is 3.0\n" +
@@ -45,7 +45,7 @@ public class StatementTest {
     @Test
     public void testStatementNewReleaseLongRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("Interstellar", Movie.NEW_RELEASE), 3));
+        statement.addRental(new Rental(new NewReleaseMovie("Interstellar"), 3));
         assertEquals("Rental Record for Me\n" +
                 "\tInterstellar\t9.0\n" +
                 "Amount owed is 9.0\n" +
@@ -55,7 +55,7 @@ public class StatementTest {
     @Test
     public void testStatementChildrensShortRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("Zootopie", Movie.CHILDRENS), 2));
+        statement.addRental(new Rental(new ChildrensMovie("Zootopie"), 2));
         assertEquals("Rental Record for Me\n" +
                 "\tZootopie\t1.5\n" +
                 "Amount owed is 1.5\n" +
@@ -65,7 +65,7 @@ public class StatementTest {
     @Test
     public void testStatementChildrensLongRental() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("Zootopie", Movie.CHILDRENS), 6));
+        statement.addRental(new Rental(new ChildrensMovie("Zootopie"), 6));
         assertEquals("Rental Record for Me\n" +
                 "\tZootopie\t6.0\n" +
                 "Amount owed is 6.0\n" +
@@ -75,9 +75,9 @@ public class StatementTest {
     @Test
     public void testStatementSeveralRentals() {
         Statement statement = new Statement("Me");
-        statement.addRental(new Rental(new Movie("Zootopie", Movie.CHILDRENS), 1));
-        statement.addRental(new Rental(new Movie("Interstellar", Movie.NEW_RELEASE), 2));
-        statement.addRental(new Rental(new Movie("RRRrrrr!!!", Movie.REGULAR), 1));
+        statement.addRental(new Rental(new ChildrensMovie("Zootopie"), 1));
+        statement.addRental(new Rental(new NewReleaseMovie("Interstellar"), 2));
+        statement.addRental(new Rental(new RegularMovie("RRRrrrr!!!"), 1));
         assertEquals("Rental Record for Me\n" +
                 "\tZootopie\t1.5\n" +
                 "\tInterstellar\t6.0\n" +
