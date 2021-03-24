@@ -63,14 +63,15 @@ Refactoring Demo based on:
    3. Extract method `formatRentalLine(rental, rentalAmount)`
    
    After these steps, the method could look like this:
-   ```javascript
-   rentalLine(rental) {
-     this.frequentRenterPoints += this.determineFrequentRenterPoints(rental)
-     const amount = this.determineAmount(rental)
-     this.totalAmount += amount
-     return this.formatRentalLine(rental, amount)
-   }
+   ```java
+   private String rentalLine(Rental rental) {
+        double rentalAmount = determineAmount(rental);
+        frequentRenterPoints += determineFrequentRenterPoints(rental);
+        totalAmount += rentalAmount;
+        return formatRentalLine(rental, rentalAmount);
+    }
    ```
+   
 8. `Statement.determineAmount(rental)` - This method is only dependent on class `Rental`
     1.  move to class `Rental` -> `rental.determineAmount()`
 9.  `Statement.determineFrequentRenterPoints(rental)` - This method is only dependent on class `Rental`
