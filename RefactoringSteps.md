@@ -45,18 +45,21 @@ Refactoring Demo based on:
 6. `Statement.rentalLines()`
    1. Extract method `rentalLine()`
    
-   The new method could look like this:
-   ```javascript
-   rentalLines() {
-     return this.rentals
-       .map(rental => this.rentalLine(rental))
-       .join('')
-   }
+   The method `rentalLines()` could look like this:
+   ```java
+   private String rentalLines() {
+        return rentals
+                .stream()
+                .map(this::rentalLine)
+                .collect(Collectors.joining(""));
+    }
    ```
 
 7. `Statement.rentalLine()`
    1. Extract method `determineAmount(rental)`
-   2. Extract method `determineFrequentRenterPoints(rental)`. The method should return the frequent renter points. The assignment to `this.frequentRenterPoints` should be kept in `Statement.rentalLine()`. The goal is to have this function calls symmetric, using assignments which makes it easier to read. 
+   2. Extract method `determineFrequentRenterPoints(rental)`. The method should return the frequent renter points. 
+      The assignment to `frequentRenterPoints` should be kept in `Statement.rentalLine()`.
+      The goal is to have this function calls symmetric, using assignments which makes it easier to read. 
    3. Extract method `formatRentalLine(rental, rentalAmount)`
    
    After these steps, the method could look like this:
