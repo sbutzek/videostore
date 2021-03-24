@@ -139,70 +139,89 @@ Refactoring Demo based on:
     ```
 
 14. `Movie.determineAmount()` - Replace `switch` statement with polymorphism
-    1.  Create three classes: `RegularMovie`, `ChildrensMovie` and `NewReleaseMovie` extending `Movie` and replace constructor calls in `videostore.qunit.js` to use the new classes. 
+    1.  Create three classes: `RegularMovie`, `ChildrensMovie` and `NewReleaseMovie` extending `Movie` and replace constructor calls in `StatementTest` to use the new classes. 
     2. Add and use new constructors for the new classes without `priceCode`
     3. Push down the implementation of `Movie.determineAmount()` to call newly created classes
-    4. Run tests and show unused code in coverage
-    5. Remove unused cases from `switch` statement for each class
-    6. Remove `switch` statement and only keep the only remaining case.
+    4. Make class `Movie` abstract and add abstract method `Movie.determineAmount()`
+    5. Run tests and show unused code in coverage
+    6. Remove unused cases from `switch` statement for each class
+    7. Remove `switch` statement and only keep the only remaining case.
 15. `Movie.determineFrequentRenterPoints()`
     1. Keep a general method which is returning `1` for in the `Movie` class
     2. Override method in `NewReleaseMovie` and remove check for `priceCode`
 16. `Movie` and its sub classes
     1. Remove `MovieType` and the concept of `priceCode` which is no longer needed.
-    2. Remove redundant constructors of sub classes
 17. Your final Movie classes might look like this:
-    ```javascript
-    export class Movie {
-      constructor(title) {
-        this.title = title
-      }
-
-      determineFrequentRenterPoints(daysRented) {
-        return 1
-      }
-
-      getTitle() {
-        return this.title
-      }
+    ```java
+    public abstract class Movie {
+        private final String title;
+    
+        public Movie(String title) {
+            this.title = title;
+        }
+    
+        public String getTitle (){
+            return title;
+        }
+    
+        public int determineFrequentRenterPoints(int daysRented) {
+            return 1;
+        }
+    
+        public abstract double determineAmount(int daysRented);
     }
 
-    export class RegularMovie extends Movie {
-      determineAmount(daysRented) {
-        let amount = 2
-        if (daysRented > 2) {
-          amount += (daysRented - 2) * 1.5
+    public class RegularMovie extends Movie {
+        public RegularMovie(String title) {
+            super(title);
         }
-        return amount
-      }
+    
+        public double determineAmount(int daysRented) {
+            double thisAmount = 2;
+            if (daysRented > 2) {
+                thisAmount += (daysRented - 2) * 1.5;
+            }
+            return thisAmount;
+        }
     }
 
-    export class NewReleaseMovie extends Movie {
-      determineAmount(daysRented) {
-        return daysRented * 3
-      }
-
-      determineFrequentRenterPoints(daysRented) {
-        if (daysRented > 1) {
-          return 2
+    public class NewReleaseMovie extends Movie {
+        public NewReleaseMovie(String title) {
+            super(title);
         }
-        return super.determineFrequentRenterPoints(daysRented)
-      }
+    
+        public int determineFrequentRenterPoints(int daysRented) {
+            if (daysRented > 1) {
+                return 2;
+            }
+            return 1;
+        }
+    
+        public double determineAmount(int daysRented) {
+            double thisAmount = 0;
+            thisAmount += daysRented * 3;
+            return thisAmount;
+        }
     }
 
-    export class ChildrensMovie extends Movie {
-      determineAmount(daysRented) {
-        let amount = 1.5
-        if (daysRented > 3) {
-          amount += (daysRented - 3) * 1.5
+    public class ChildrensMovie extends Movie {
+        public ChildrensMovie(String title) {
+            super(title);
         }
-        return amount
-      }
+    
+        public double determineAmount(int daysRented) {
+            double thisAmount = 0;
+            thisAmount += 1.5;
+            if (daysRented > 3) {
+                thisAmount += (daysRented - 3) * 1.5;
+            }
+            return thisAmount;
+        }
     }
     ```
 
     *Why did we do this?*
-      * [Open Closed Principle (OCP)](http://www.principles-wiki.net/principles:open-closed_principle)
-        In case of extending the application by adding new movie types, this can now be done by adding new classes (open for extension) instead of adjusting the `Movie` and the `switch` statement (closed for modification). In case of adjusting the `switch` statement, this code would get more complex and more test cases would have to be added for the same code, every time a movie type is added. 
-
-18. Finally the newly created classes can be moved to its own files (e.g. `regular-movie.js`, `childrens-movie.js`, `new-release-movie.js`). You can use the `Move to a new file` refactoring and rename the files depending on your file name conventions. 
+      * [Open Closed Principle (OCP)](http://www.principles-wiki.net/principles:open-closed_principle):
+        In case of extending the application by adding new movie types, this can now be done by adding new classes (open for extension) instead of adjusting `Movie` and the `switch` statement (closed for modification).
+        In case of adjusting the `switch` statement, this code would get more complex and more test cases would have to be added for the same code, every time a movie type is added.
+        
