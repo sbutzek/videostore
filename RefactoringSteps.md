@@ -7,15 +7,15 @@ Refactoring Demo based on:
 # Notes for Trainers
 
 * Explain the Source Code, starting with the tests
-* Show classes `Rental`, `Movie`, `Statement`
+* Show classes `Rental`, `Movie`, `Customer`
 * Run tests
 * Show test results after each refactoring step
 * Show coverage
 * Explain Shortcuts
 
 # Refactoring steps
-1. Rename class `Statement` to `Statement`
-2. Rename variable `statement` in `CustomerTest` to `statement`
+1. Rename class `Customer` to `Statement` and `CustomerTest` to `StatementTest`.
+2. Rename variable `customer` in `StatementTest` to `statement`
 4. Rename method `Statement.statement()` to `Statement.generate()`
 5. `Statement.generate()`
    1. Extract method `clearTotals()` (initialization of `totalAmount` and `frequentRenterPoints`)
