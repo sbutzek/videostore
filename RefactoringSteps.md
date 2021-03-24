@@ -77,63 +77,67 @@ Refactoring Demo based on:
 9.  `Statement.determineFrequentRenterPoints(rental)` - This method is only dependent on class `Rental`
     1. Move to class `Rental` -> `rental.determineFrequentRenterPoints()`
 
-10. *Note:* The class `Statement` is now responsible for formatting, `Rental` is responsible for the calculation. Here we applied again the [Single Responsibility Principle](http://www.principles-wiki.net/principles:single_responsibility_principle) on class level, we have the same layer of abstraction ([SLA](http://www.principles-wiki.net/principles:single_level_of_abstraction)) and the method is now short and easy to understand.
+10. *Note:* The class `Statement` is now responsible for formatting, `Rental` is responsible for the calculation.
+    Here we applied again the [Single Responsibility Principle](http://www.principles-wiki.net/principles:single_responsibility_principle) on class level,
+    we have the same layer of abstraction ([SLA](http://www.principles-wiki.net/principles:single_level_of_abstraction))
+    and the method is now short and easy to understand.
    
     The `Statement.rentalLine()` method could now look like this:
-    ```javascript
-    rentalLine(rental) {
-      this.frequentRenterPoints += rental.determineFrequentRenterPoints()
-      const amount = rental.determineAmount()
-      this.totalAmount += amount
-      return this.formatRentalLine(rental, amount)
+    ```java
+    private String rentalLine(Rental rental) {
+        frequentRenterPoints += rental.determineFrequentRenterPoints();
+        double rentalAmount = rental.determineAmount();
+        totalAmount += rentalAmount;
+        return formatRentalLine(rental, rentalAmount);
     }
     ```
-11. `Rental.determineAmount()` - The calculation depends on `Movie` and the `MovieType`. It only depends on `daysRented` from `Rental`. Because we have more dependencies to `Movie` than to `Rental`, the implementation of this method might belong to `Movie`. 
-    1. Create method `Movie.determineAmount(daysRented)` and delegate to it from `Rental.determineAmount()`.
+
+11. `Rental.determineAmount()` - The calculation depends on `Movie` and the `MovieType`. It only depends on `daysRented` from `Rental`.
+    Because we have more dependencies to `Movie` than to `Rental`, the implementation of this method might belong to `Movie`.
+    1. Create method `Movie.determineAmount(int daysRented)` and delegate to it from `Rental.determineAmount()`.
 12. `Rental.determineFrequentRenterPoints()` (Same as above)
-    1. Create method `Movie.determineFrequentRenterPoints(daysRented)` and delegate to it. 
+    1. Create method `Movie.determineFrequentRenterPoints(int daysRented)` and delegate to it. 
 13. The methods `Rental.determineAmount()` and `Rental.determineFrequentRenterPoints` could look like this:
-    ```javascript
-    determineAmount() {
-      return this.movie.determineAmount(this.daysRented)
+    ```java
+    public double determineAmount() {
+        return movie.determineAmount(daysRented);
     }
 
-    determineFrequentRenterPoints() {
-      return this.movie.determineFrequentRenterPoints(this.daysRented)
+    public int determineFrequentRenterPoints() {
+        return movie.determineFrequentRenterPoints(daysRented);
     }
     ```
 
-    The methods `Movie.determineAmount(daysRented)` and `Movie.determineFrequentRenterPoints(daysRented)` could look like this:
-    ```javascript
-    determineAmount(daysRented) {
-      let amount = 0
-      switch (this.priceCode) {
-        case MovieType.REGULAR:
-          amount += 2
-          if (daysRented > 2) {
-            amount += (daysRented - 2) * 1.5
-          }
-          break
-        case MovieType.NEW_RELEASE:
-          amount += daysRented * 3
-          break
-        case MovieType.CHILDRENS:
-          amount += 1.5
-          if (daysRented > 3) {
-            amount += (daysRented - 3) * 1.5
-          }
-          break
-      }
-      return amount
+    The methods `Movie.determineAmount(int daysRented)` and `Movie.determineFrequentRenterPoints(int daysRented)` could look like this:
+    ```java
+    public double determineAmount(int daysRented) {
+        double thisAmount = 0;
+        switch (priceCode) {
+            case REGULAR:
+                thisAmount += 2;
+                if (daysRented > 2)
+                    thisAmount += (daysRented - 2) * 1.5;
+                break;
+            case NEW_RELEASE:
+                thisAmount += daysRented * 3;
+                break;
+            case CHILDRENS:
+                thisAmount += 1.5;
+                if (daysRented > 3)
+                    thisAmount += (daysRented - 3) * 1.5;
+                break;
+        }
+        return thisAmount;
     }
 
-    determineFrequentRenterPoints(daysRented) {
-      if (this.priceCode === MovieType.NEW_RELEASE && daysRented > 1) {
-        return 2
-      }
-      return 1
+    public int determineFrequentRenterPoints(int daysRented) {
+        if (priceCode == NEW_RELEASE && daysRented > 1) {
+            return 2;
+        }
+        return 1;
     }
     ```
+
 14. `Movie.determineAmount()` - Replace `switch` statement with polymorphism
     1.  Create three classes: `RegularMovie`, `ChildrensMovie` and `NewReleaseMovie` extending `Movie` and replace constructor calls in `videostore.qunit.js` to use the new classes. 
     2. Add and use new constructors for the new classes without `priceCode`
