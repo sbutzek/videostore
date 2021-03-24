@@ -1,9 +1,10 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 class Statement {
     private String _name;
-    private List<Rental> _rentals = new ArrayList<>();
+    private List<Rental> rentals = new ArrayList<>();
     private double totalAmount;
     private int frequentRenterPoints;
 
@@ -12,7 +13,7 @@ class Statement {
     }
 
     public void addRental(Rental arg) {
-        _rentals.add(arg);
+        rentals.add(arg);
     }
 
     public String getName() {
@@ -35,15 +36,31 @@ class Statement {
     }
 
     private String rentalLines() {
-        String rentalLines = "";
-        for (Rental rental : _rentals) {
-            rentalLines += rentalLine(rental);
-        }
-        return rentalLines;
+        return rentals
+                .stream()
+                .map(this::rentalLine)
+                .collect(Collectors.joining(""));
     }
 
     private String rentalLine(Rental rental) {
 
+        double thisAmount = determineAmount(rental);
+        frequentRenterPoints += determineFrequentRenterPoints(rental);
+
+        totalAmount += thisAmount;
+        return "\t" + rental.getMovie().getTitle() + "\t" +
+                thisAmount + "\n";
+    }
+
+    private int determineFrequentRenterPoints(Rental rental) {
+        if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE)
+                && rental.getDaysRented() > 1) {
+            return 2;
+        }
+        return 1;
+    }
+
+    private double determineAmount(Rental rental) {
         double thisAmount = 0;
         //determine amounts for each line
         switch (rental.getMovie().getPriceCode()) {
@@ -61,16 +78,7 @@ class Statement {
                     thisAmount += (rental.getDaysRented() - 3) * 1.5;
                 break;
         }
-        // add frequent renter points
-        frequentRenterPoints++;
-        // add bonus for a two day new release rental
-        if ((rental.getMovie().getPriceCode() == Movie.NEW_RELEASE)
-                &&
-                rental.getDaysRented() > 1) frequentRenterPoints++;
-        //show figures for this rental
-        totalAmount += thisAmount;
-        return "\t" + rental.getMovie().getTitle() + "\t" +
-                thisAmount + "\n";
+        return thisAmount;
     }
 
     private void clearTotals() {
