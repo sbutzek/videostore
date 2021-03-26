@@ -1,4 +1,4 @@
-# Refactoring a JavaScript video store
+# Refactoring a Java video store
 Refactoring Demo based on:
 
 * [https://github.com/unclebob/videostore](https://github.com/unclebob/videostore)
